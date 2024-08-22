@@ -9,6 +9,7 @@ export default class MyHarvester {
 
   constructor(harvester: Creep, spawn: StructureSpawn) {
     this._creep = harvester;
+    this._creep.memory = { role: "harvester" };
     this._spawn = spawn;
   }
 
