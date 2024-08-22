@@ -2,7 +2,7 @@ import MyHarvester from "./creep_roles/MyHarvester";
 import MyUpgrader from "./creep_roles/MyUpgrader";
 
 const spawn = Game.spawns["Spawn1"];
-const myHarvesters = ["Harvester1", "Harvester2"];
+const myHarvesters = ["Harvester2"];
 const myUpgraders = ["Upgrader1"];
 const myHarvesterCreeps: MyHarvester[] = [];
 const myUpgraderCreeps: MyUpgrader[] = [];
@@ -15,7 +15,7 @@ myHarvesters.forEach((h) => {
     myHarvesterCreeps.push(new MyHarvester(Game.creeps[h], spawn));
   }
 });
-
+//
 myUpgraders.forEach((u) => {
   if (Game.creeps[u] == undefined) {
     spawn.spawnCreep([WORK, CARRY, MOVE], u);
@@ -24,6 +24,6 @@ myUpgraders.forEach((u) => {
     myUpgraderCreeps.push(new MyUpgrader(Game.creeps[u]));
   }
 });
-
+//
 myUpgraderCreeps.forEach((muc) => muc.run());
 myHarvesterCreeps.forEach((mhc) => mhc.harvestNearestSource());

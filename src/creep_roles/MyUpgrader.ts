@@ -1,21 +1,19 @@
 export default class MyUpgrader {
   private _creep: Creep;
-  private _currentJob = "REFILL";
 
   constructor(creep: Creep) {
     this._creep = creep;
-    this._creep.memory = { role: "upgrader" };
   }
 
   // Method to perform the upgrade action
   upgradeController() {
-    if (this._creep.store[RESOURCE_ENERGY] > 0) {
-      if (
-        this._creep.upgradeController(this._creep.room.controller!) ===
-        ERR_NOT_IN_RANGE
-      ) {
-        this._creep.moveTo(this._creep.room.controller!);
-      }
+    if (
+      this._creep.upgradeController(this._creep.room.controller!) ===
+      ERR_NOT_IN_RANGE
+    ) {
+      this._creep.moveTo(this._creep.room.controller!);
+    } else {
+      this._creep.transfer(this._creep.room.controller!, "energy");
     }
   }
 
@@ -30,19 +28,7 @@ export default class MyUpgrader {
     ) {
       this._creep.moveTo(nearestSource);
     } else {
-      // Alternatively, fetch energy from containers or storage
-      const container = this._creep.pos.findClosestByPath(FIND_STRUCTURES, {
-        filter: (structure) =>
-          structure.structureType === STRUCTURE_CONTAINER &&
-          structure.store[RESOURCE_ENERGY] > 0,
-      });
-
-      if (
-        container &&
-        this._creep.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE
-      ) {
-        this._creep.moveTo(container);
-      }
+      nearestSource && this._creep.harvest(nearestSource);
     }
   }
 
@@ -58,13 +44,17 @@ export default class MyUpgrader {
 
   // Method to execute the role behavior, typically called each tick
   run() {
-    switch (this._currentJob) {
+    //@ts-ignore
+    console.log("current job", this._creep.memory["currentJob"]);
+    //@ts-ignore
+    switch (this._creep.memory["currentJob"]) {
       case "REFILL":
-        if (this.isStoreFull()) this._currentJob = "TRANSFER_ENERGY";
+        if (this.isStoreFull())
+          this._creep.memory = { currentJob: "TRANSFER_ENERGY" };
         this.fetchEnergy();
         break;
       case "TRANSFER_ENERGY":
-        if (this.isStoreEmpty()) this._currentJob = "REFILL";
+        if (this.isStoreEmpty()) this._creep.memory = { currentJob: "REFILL" };
         this.upgradeController();
         break;
     }
