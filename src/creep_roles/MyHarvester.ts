@@ -60,7 +60,7 @@ export default class MyHarvester {
     const nearestSource = this._creep.pos.findClosestByPath(FIND_SOURCES);
     if (nearestSource && this.canCarryMore()) {
       if (this._creep.harvest(nearestSource) === ERR_NOT_IN_RANGE) {
-        this._creep.moveTo(nearestSource);
+        this._creep.moveTo(nearestSource, { reusePath: 20 });
       }
     } else if (!this.canCarryMore()) {
       this.getBackToSpawn();

@@ -11,7 +11,9 @@ export default class MyUpgrader {
       this._creep.upgradeController(this._creep.room.controller!) ===
       ERR_NOT_IN_RANGE
     ) {
-      this._creep.moveTo(this._creep.room.controller!);
+      this._creep.moveTo(this._creep.room.controller!, {
+        reusePath: 20, // Number of ticks to reuse the path
+      });
     } else {
       this._creep.transfer(this._creep.room.controller!, "energy");
     }
@@ -26,7 +28,7 @@ export default class MyUpgrader {
       nearestSource &&
       this._creep.harvest(nearestSource) === ERR_NOT_IN_RANGE
     ) {
-      this._creep.moveTo(nearestSource);
+      this._creep.moveTo(nearestSource, { reusePath: 20 });
     } else {
       nearestSource && this._creep.harvest(nearestSource);
     }

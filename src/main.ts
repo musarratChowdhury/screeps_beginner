@@ -1,11 +1,22 @@
 import MyHarvester from "./creep_roles/MyHarvester";
 import MyUpgrader from "./creep_roles/MyUpgrader";
+import Builder from "./creep_roles/MyBuilder";
 
 const spawn = Game.spawns["Spawn1"];
 const myHarvesters = ["Harvester2"];
 const myUpgraders = ["Upgrader1"];
+const myBuilder = ["Builder1"];
 const myHarvesterCreeps: MyHarvester[] = [];
 const myUpgraderCreeps: MyUpgrader[] = [];
+const myBuilderCreeps: Creep[] = [];
+
+myBuilder.forEach((b) => {
+  if (Game.creeps[b] == undefined) {
+    spawn.spawnCreep([WORK, CARRY, MOVE], b, { memory: { role: "builder" } });
+  } else {
+    myBuilderCreeps.push(Game.creeps[b]);
+  }
+});
 
 myHarvesters.forEach((h) => {
   if (Game.creeps[h] == undefined) {
@@ -27,3 +38,4 @@ myUpgraders.forEach((u) => {
 //
 myUpgraderCreeps.forEach((muc) => muc.run());
 myHarvesterCreeps.forEach((mhc) => mhc.harvestNearestSource());
+myBuilderCreeps.forEach((bC) => Builder.build(bC));
